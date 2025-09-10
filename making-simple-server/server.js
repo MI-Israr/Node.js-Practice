@@ -32,12 +32,15 @@
 
 import http from "http";
 
+const hostName = "127.0.0.1";
+const port = 3000;
+
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader("content-type", "text/plain");
   res.end("Hello world! This is a Node.js server");
 });
 
-server.listen(3000, "127.0.0.1", () => {
-  console.log("Server is running on port: 3000, with host 127.0.0.1");
+server.listen(port, hostName, () => {
+  console.log(`Server is running on port: ${port}, on Host ${hostName}`);
 });
