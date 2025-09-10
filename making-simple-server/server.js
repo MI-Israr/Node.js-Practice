@@ -57,17 +57,13 @@ const server = http.createServer((req, res) => {
   if (req.method === "GET" && req.url === "/") {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("This is the Home Page");
-  }
-  if (req.method === "GET" && req.url === "/projects") {
+  } else if (req.method === "GET" && req.url === "/projects") {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("This is a Projects page");
-  }
-  if (req.method === "GET" && req.url === "/blog") {
+  } else if (req.method === "GET" && req.url === "/blog") {
     res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("This is the Blog Page");
-  }
-
-  if (req.method === "GET" && req.url === "/users") {
+  } else if (req.method === "GET" && req.url === "/users") {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
@@ -75,6 +71,26 @@ const server = http.createServer((req, res) => {
         data: users,
       })
     );
+  } else if (req.method === "POST" && req.url === "/users") {
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+    req.on("end", () => {
+      const newUser = JSON.parse(body);
+      newUser.id = users.length + 1;
+      users.push(newUser);
+      res.writeHead(201, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({
+          message: "New User is added successfully...",
+          data: newUser,
+        })
+      );
+    });
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("404 Not Found");
   }
 });
 
