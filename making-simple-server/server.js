@@ -38,6 +38,6 @@ const server = http.createServer((req, res) => {
   res.end("Hello world! This is a Node.js server");
 });
 
-server.listen(3000, () => {
+server.listen(3000, "127.0.0.1", () => {
   console.log("Server is running on port: 3000, with host 127.0.0.1");
 });
