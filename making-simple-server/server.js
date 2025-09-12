@@ -98,68 +98,129 @@
 //   console.log("Server is running on port 3000, host name is 127.0.0.1");
 // });
 
+// const db = {
+//   users: [],
+
+//   createNew: (user) => {
+//     this.users.push(user);
+//   },
+//   getUsers: async () => {
+//     return new Promise((resolve, reject) => {
+//       setTimeout(() => {
+//         resolve(this.users);
+//       }, 200);
+//       reject(error);
+//     });
+//   },
+// };
+
+// await db.getUsers();
+
 import express from "express";
+import mongoose from "mongoose";
 
 const app = express();
 app.use(express.json());
 
-let users = [
-  { id: 1, name: "Rizwan", age: 24 },
-  { id: 2, name: "Hammd", age: 21 },
-  { id: 3, name: "Abdul Rehman", age: 23 },
-];
-
-app.get("/", (req, res) => {
-  res.send("Hello, Express Server!");
-});
-
-app.get("/blog", (req, res) => {
-  res.send("This is the blog page");
-});
-
-app.get("/users", (req, res) => {
-  res.send(JSON.stringify(users));
-});
-
-app.post("/users", (req, res) => {
-  const userData = req.body;
-  const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
-  const addUser = { id: newId, ...userData };
-  users.push(addUser);
-
-  res.status(201).json({
-    message: "User Added Successfully",
-    user: userData,
+mongoose
+  .connect("mongodb+srv://israr:aPzCHLZnuvdhtR9h@cluster0.4nkzk.mongodb.net/")
+  .then(() => console.log("MongoDB is connected"))
+  .catch((err) => {
+    console.log("mongoDB error", err);
   });
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  age: {
+    type: Number,
+  },
 });
 
-app.put("/users/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const updatedData = req.body;
-  const userIndex = users.findIndex((u) => u.id === id);
-  if (userIndex === -1) {
-    res.status(404).json({ message: "User Not Found..." });
-  }
-  users[userIndex] = { ...users[userIndex], ...updatedData };
-  res.json({
-    message: "User is Updated Successfully...",
-    user: users[userIndex],
-  });
+const User = mongoose.model("User", userSchema);
+
+// const filterUser = (id) => users.findIndex((u) => u.id === id);
+// const handleError = (res) =>
+//   res.status(404).json({ message: "User Not Found..." });
+
+// app.get("/", (req, res) => {
+//   res.send("Hello, Express Server!");
+// });
+
+// app.get("/blog", (req, res) => {
+//   res.send("This is the blog page");
+// });
+
+// app.get("/users", (req, res) => {
+//   res.send(JSON.stringify(users));
+// });
+
+// app.post("/users", (req, res) => {
+//   const userData = req.body;
+//   const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
+//   const addUser = { id: newId, ...userData };
+//   users.push(addUser);
+
+//   res.status(201).json({
+//     message: "User Added Successfully",
+//     user: userData,
+//   });
+// });
+
+// app.put("/users/:id", (req, res) => {
+//   const id = parseInt(req.params.id);
+//   const updatedData = req.body;
+//   const userIndex = filterUser(id);
+//   if (userIndex === -1) {
+//     return handleError(res);
+//   }
+//   users[userIndex] = { ...users[userIndex], ...updatedData };
+//   res.json({
+//     message: "User is Updated Successfully...",
+//     user: users[userIndex],
+//   });
+// });
+
+// app.delete("/users/:id", (req, res) => {
+//   const id = parseInt(req.params.id);
+//   const userIndex = filterUser(id);
+//   if (userIndex === -1) {
+//     return handleError(res);
+//   }
+
+//   const deleteUser = users.splice(userIndex, 1);
+
+//   res.json({
+//     message: "User is deleted Successfully...",
+//     user: deleteUser,
+//   });
+// });
+
+app.get("/users", async (req, res) => {
+  let data = await User.find({});
+  res.send(data);
 });
 
-app.delete("/users/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const userIndex = users.findIndex((u) => u.id === id);
-  if (userIndex === -1) {
-    res.status(404).json({ message: "User Not Found..." });
-  }
+app.get("/user", async (req, res) => {
+  const id = "68c3f6fe5cf61badcba8890f";
+  let data = await User.findById(id);
+  res.send(data);
+});
 
-  const deleteUser = users.splice(userIndex, 1);
+app.put("/user", async (req, res) => {
+  const id = req.body.id;
+  let newUser = req.body;
+  let data = await User.findByIdAndUpdate(id, newUser);
+  res.send(data);
+});
 
-  res.json({
-    message: "User is deleted Successfully...",
-    user: deleteUser,
-  });
+app.post("/signup", (req, res) => {
+  const user = { name: "rizwan", age: 23 };
+  const post = new User(user);
+  post.save();
+  res.send("user posted");
 });
 
 app.listen(3000, () => {
