@@ -116,30 +116,7 @@
 
 // await db.getUsers();
 
-import express from "express";
-import mongoose from "mongoose";
-
-const app = express();
-app.use(express.json());
-
-mongoose
-  .connect("mongodb+srv://israr:aPzCHLZnuvdhtR9h@cluster0.4nkzk.mongodb.net/")
-  .then(() => console.log("MongoDB is connected"))
-  .catch((err) => {
-    console.log("mongoDB error", err);
-  });
-
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  age: {
-    type: Number,
-  },
-});
-
-const User = mongoose.model("User", userSchema);
+//without mongoose
 
 // const filterUser = (id) => users.findIndex((u) => u.id === id);
 // const handleError = (res) =>
@@ -198,9 +175,23 @@ const User = mongoose.model("User", userSchema);
 //   });
 // });
 
-app.get("/users", async (req, res) => {
-  let data = await User.find({});
-  res.send(data);
+import express from "express";
+import User from "./models/User.js";
+import ConnectDatabase from "./db/connection.js";
+import UserControler from "./controllers/useControllers.js";
+
+const app = express();
+app.use(express.json());
+
+ConnectDatabase();
+
+app.get("/users", UserControler.getUsers);
+
+app.post("/signup", (req, res) => {
+  const user = { name: "rizwan", age: 23 };
+  const post = new User(user);
+  post.save();
+  res.send("user posted");
 });
 
 app.get("/user", async (req, res) => {
@@ -214,13 +205,6 @@ app.put("/user", async (req, res) => {
   let newUser = req.body;
   let data = await User.findByIdAndUpdate(id, newUser);
   res.send(data);
-});
-
-app.post("/signup", (req, res) => {
-  const user = { name: "rizwan", age: 23 };
-  const post = new User(user);
-  post.save();
-  res.send("user posted");
 });
 
 app.listen(3000, () => {
