@@ -2,9 +2,11 @@ import express from "express";
 import connectDataBase from "./config/db.js";
 import userRouter from "./routers/userRoutes.js";
 import authRouter from "./routers/authRouters.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 connectDataBase();
 

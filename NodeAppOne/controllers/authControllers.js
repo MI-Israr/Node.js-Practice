@@ -25,15 +25,8 @@ export const signup = async (req, res) => {
       gender,
     });
 
-    // Generate token
-    const payload = { id: user._id, email: user.email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || "1h",
-    });
-
     res.status(201).json({
       message: "Signup successful",
-      token,
       user: { id: user._id, firstName, lastName, email, gender },
     });
   } catch (error) {
@@ -59,12 +52,11 @@ export const login = async (req, res) => {
     // Generate token
     const payload = { id: user._id, email: user.email };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: process.env.JWT_EXPIRES_IN || "1h",
     });
-
+    res.cookie("token", token);
     res.status(200).json({
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         firstName: user.firstName,
