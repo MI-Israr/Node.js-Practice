@@ -1,39 +1,4 @@
-import jwt from "jsonwebtoken";
 import User from "../models/userModels.js";
-import bcrypt from "bcrypt";
-// export const createUser = async (req, res) => {
-//   try {
-//     const { firstName, lastName, password, gender, email } = req.body;
-
-//     // hash password
-//     const hash = await bcrypt.hash(password, 10);
-
-//     // create user in DB
-//     const user = await User.create({
-//       firstName,
-//       lastName,
-//       email,
-//       password: hash,
-//       gender,
-//     });
-
-//     // payload for JWT
-//     const payload = { id: user._id, email: user.email };
-
-//     // sign token
-//     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-//       expiresIn: "1h",
-//     });
-
-//     res.status(201).json({
-//       message: "User Created Successfully",
-//       token,
-//       data: user,
-//     });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
 
 export const getUsers = async (req, res) => {
   try {
