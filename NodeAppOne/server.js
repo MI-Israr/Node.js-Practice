@@ -13,9 +13,9 @@ connectDataBase();
 app.get("/", (req, res) => {
   res.send("This is a express server");
 });
-// Routes
-app.use("/users", userRouter); // Protected user operations
-app.use("/auth", authRouter); // Login + Signup
+
+app.use("/users", userRouter);
+app.use("/auth", authRouter);
 
 app.listen("3000", () => {
   console.log("Server is running on Port: 3000...");

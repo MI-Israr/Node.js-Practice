@@ -1,5 +1,6 @@
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+
 export const userSchema = z.object({
   firstName: z.string().min(1, "FirstName is required"),
   lastName: z.string().min(1, "LastName is required"),
@@ -42,9 +43,9 @@ export const tokenValidate = (req, res, next) => {
       return res.status(401).json({ error: "No token provided" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // same secret
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decoded; // attach decoded payload
+    req.user = decoded;
     next();
   } catch (error) {
     return res.status(401).json({ error: error.message });
