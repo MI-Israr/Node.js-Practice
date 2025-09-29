@@ -9,14 +9,14 @@ import * as userServices from "../services/userServices.js";
 //   }
 // };
 
-export const getUsers = async (req, res) => {
-  try {
-    const users = await userServices.getAllUsers();
-    res.status(200).json({ data: users });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+// export const getUsers = async (req, res) => {
+//   try {
+//     const users = await userServices.getAllUsers();
+//     res.status(200).json({ data: users });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 // export const getUserById = async (req, res) => {
 //   try {
@@ -93,12 +93,12 @@ export const patchUser = async (req, res) => {
 //   }
 // };
 
-export const deleteUser = async (req, res) => {
-  try {
-    const user = await userServices.deleteUserService(req.params.id);
-    if (!user) return res.status(404).json({ error: "User Not Found..." });
-    res.status(200).json({ message: "User Deleted Successfully", data: user });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+// export const deleteUser = async (req, res) => {
+//   try {
+//     const user = await userServices.deleteUserService(req.params.id);
+//     if (!user) return res.status(404).json({ error: "User Not Found..." });
+//     res.status(200).json({ message: "User Deleted Successfully", data: user });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };

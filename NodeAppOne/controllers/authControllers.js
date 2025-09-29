@@ -1,4 +1,4 @@
-import * as authService from "../services/authService.js";
+import * as authService from "../services/authServices.js";
 
 // Signup
 export const signup = async (req, res) => {
@@ -6,7 +6,7 @@ export const signup = async (req, res) => {
     const user = await authService.signup(req.body);
     res.status(201).json({
       message: "Signup successful",
-      user: { id: user._id, firstName, lastName, email, gender },
+      user: { id: user._id, firstName, lastName, email, gender, role },
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -46,15 +46,17 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { user, token } = await authService.login(req.body);
+    const { firstName, lastName, email } = user;
 
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token);
     res.status(200).json({
       message: "Login successful",
       user: {
         id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        role: user.role
       },
     });
   } catch (error) {

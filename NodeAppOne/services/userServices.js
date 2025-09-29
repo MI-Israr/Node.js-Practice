@@ -1,9 +1,9 @@
 import User from "../models/userModels.js";
 
 // Get all users
-export const getAllUsers = async () => {
-  return await User.find();
-};
+// export const getAllUsers = async () => {
+//   return await User.find();
+// };
 
 // Get user by ID
 export const getUserByIdService = async (id) => {
@@ -27,6 +27,6 @@ export const patchUserService = async (id, data) => {
 };
 
 // Delete user
-export const deleteUserService = async (id) => {
-  return await User.findByIdAndDelete(id);
-};
+// export const deleteUserService = async (id) => {
+//   return await User.findByIdAndDelete(id);
+// };

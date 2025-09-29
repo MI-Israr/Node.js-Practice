@@ -15,3 +15,16 @@ export const tokenValidate = (req, res, next) => {
     return res.status(401).json({ error: error.message });
   }
 };
+
+//Authorization middleware
+export const authorizeRoles = (roles) => {
+  return (req, res, next) => {
+     if (typeof roles === "string") {
+      roles = [roles];
+    }
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ error: "Access denied. Not authorized" });
+    }
+    next();
+  };
+};

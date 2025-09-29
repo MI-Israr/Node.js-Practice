@@ -37,8 +37,7 @@ export const login = async ({ email, password }) => {
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid email or password");
-
-  const payload = { id: user._id, email: user.email };
+  const payload = { id: user._id, email: user.email,role: user.role };
   const token = generateToken(payload);
 
   return {
@@ -47,6 +46,7 @@ export const login = async ({ email, password }) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      role:user.role
     },
     token,
   };
